@@ -1,6 +1,2 @@
 include ':demo-dlib',
-//        ':lib-reactive',
-//        ':lib-core',
-//        ':lib-widget',
-//        ':lib-protobuf',
         ':lib-dlib'
