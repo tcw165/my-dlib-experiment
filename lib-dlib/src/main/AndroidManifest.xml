@@ -1,0 +1,4 @@
+<manifest package="com.my.jni.dlib"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+    <application/>
+</manifest>

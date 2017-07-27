@@ -1,0 +1,105 @@
+apply plugin: "com.android.application"
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "my.demo.dlib"
+        minSdkVersion 21
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+
+        ndk {
+            // "x86", "x86_64", "armeabi", "armeabi-v7a", "arm64-v8a"
+            abiFilters "armeabi-v7a"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+
+    lintOptions {
+        disable "MissingTranslation"
+    }
+
+    // Pick first STL shared library if there're duplicate files in the
+    // dependent module.
+    packagingOptions {
+        pickFirst  "**/libc++_shared.so"
+    }
+}
+
+repositories {
+    maven { url "https://maven.fabric.io/public" }
+    // Find the AAR files in the libs folder.
+    flatDir { dirs "libs" }
+}
+
+dependencies {
+    compile fileTree(dir: "libs", include: ["*.jar"])
+
+    // Google Support Library.
+    compile rootProject.ext.dep.supportAppcompatV7
+    compile rootProject.ext.dep.supportRecyclerViewV7
+    compile rootProject.ext.dep.supportGridLayoutV7
+    compile rootProject.ext.dep.supportCardViewV7
+    compile rootProject.ext.dep.supportDesign
+    compile rootProject.ext.dep.supportVectorDrawable
+    compile rootProject.ext.dep.supportConstraintLayout
+    compile rootProject.ext.dep.supportPercent
+    compile rootProject.ext.dep.supportTransition
+    // Multi-dex.
+    compile rootProject.ext.dep.supportMultidex
+    // Google CameraView.
+    compile(name: "google-cameraview", ext:"aar")
+    // Google Vision.
+    compile rootProject.ext.dep.playServicesVision
+
+    // Rx-Java.
+    compile rootProject.ext.dep.rxJava
+    compile rootProject.ext.dep.rxAndroid
+    // Rx-Binding.
+    compile rootProject.ext.dep.rxBinding
+    compile rootProject.ext.dep.rxBindingRecyclerViewV7
+    // Rx-Permissions.
+    compile rootProject.ext.dep.rxPermissions
+
+    // JSON.
+    compile rootProject.ext.dep.gson
+
+    // View Binding.
+    compile rootProject.ext.dep.butterKnife
+    annotationProcessor rootProject.ext.dep.butterKnifeCompiler
+
+    // Image loader.
+    compile rootProject.ext.dep.glide
+
+    // Leak Detection.
+    compile rootProject.ext.dep.leakcanary
+    releaseCompile rootProject.ext.dep.leakcanaryNoOp
+
+    // My Libraries
+    compile(name: "lib-core-release", ext: "aar")
+    compile(name: "lib-reactive-release", ext: "aar")
+    compile(name: "lib-widget-release", ext: "aar")
+    compile project(":lib-dlib")
+
+    testCompile rootProject.ext.dep.testJunit
+    testCompile rootProject.ext.dep.testMockito
+    testCompile rootProject.ext.dep.leakcanaryNoOp
+
+    androidTestCompile(rootProject.ext.dep.testEspressoCore, {
+        exclude group: "com.android.support", module: "support-annotations"
+    })
+}

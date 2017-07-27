@@ -1,0 +1,38 @@
+// Whenever you make changes to this file, remember to run compile.sh.
+
+syntax = "proto3";
+package com.my.jni.dlib.data;
+
+option optimize_for = LITE_RUNTIME;
+//option cc_enable_arenas = false;
+
+// Normalized x and y.
+message Landmark {
+    float x = 1;
+    float y = 2;
+}
+
+message LandmarkList {
+    repeated Landmark landmarks = 1;
+}
+
+// Normalized Rectangles.
+message RectF {
+    float left = 1;
+    float top = 2;
+    float right = 3;
+    float bottom = 4;
+}
+
+message RectFList {
+    repeated RectF rects = 1;
+}
+
+message Face {
+    RectF bound = 1;
+    repeated Landmark landmarks = 2;
+}
+
+message FaceList {
+    repeated Face faces = 1;
+}

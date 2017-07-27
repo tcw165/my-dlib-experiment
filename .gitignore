@@ -1,0 +1,10 @@
+.DS_Store
+.gradle
+**/*.iml
+**/local.properties
+**/.idea/**
+**/build
+**/lib-distribution
+**/.externalNativeBuild
+**/captures
+**crashlytics**

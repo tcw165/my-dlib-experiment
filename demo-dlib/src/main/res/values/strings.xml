@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">My DLib Demo</string>
+
+    <!-- Activity title -->
+    <string name="title_sample_of_basic_usage">Asset Input</string>
+
+    <!-- Warning -->
+    <string name="warning_not_support_hardware_acceleration">Cannot preview the camera because it needs hardware acceleration support.</string>
+</resources>

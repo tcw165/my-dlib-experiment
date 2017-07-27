@@ -1,0 +1,39 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+apply from: rootProject.file('dependencies.gradle')
+
+// Gradle doc:
+// http://google.github.io/android-gradle-dsl/
+buildscript {
+    repositories {
+        jcenter()
+        maven {url 'https://maven.fabric.io/public'}
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.2'
+        // Crashlytics.
+        classpath 'io.fabric.tools:gradle:1.21.7'
+        // Serialization/deserialization.
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+        // Google Services (e.g. Firebase).
+        classpath 'com.google.gms:google-services:3.0.0'
+        // Google Protobuf
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.1'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
