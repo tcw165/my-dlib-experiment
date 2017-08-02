@@ -7,14 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".SampleOfFacesAndLandmarksActivity1">
 
-    <com.my.demo.dlib.view.CameraSourcePreview
-        android:id="@+id/camera"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        android:background="@android:color/black"
-        app:facing="front"
-        app:flash="off"
+    <com.my.demo.dlib.view.AutoFitTextureView
+        android:id="@+id/texture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

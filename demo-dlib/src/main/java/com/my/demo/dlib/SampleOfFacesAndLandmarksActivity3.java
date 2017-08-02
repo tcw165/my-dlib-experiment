@@ -25,13 +25,14 @@ import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
-import com.google.android.gms.vision.CameraSource;
 import com.my.core.protocol.IProgressBarView;
 import com.my.demo.dlib.protocol.ICameraMetadata;
-import com.my.demo.dlib.view.CameraSourcePreview;
+import com.my.demo.dlib.view.AutoFitTextureView;
 import com.my.demo.dlib.view.FaceLandmarksOverlayView;
+import com.my.demo.dlib.view.TextureViewObservable;
 import com.my.jni.dlib.DLibLandmarks68Detector;
 import com.my.jni.dlib.IDLibFaceDetector;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -40,7 +41,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 public class SampleOfFacesAndLandmarksActivity3
     extends AppCompatActivity
@@ -48,8 +52,8 @@ public class SampleOfFacesAndLandmarksActivity3
                IProgressBarView {
 
     // View.
-    @BindView(R.id.camera)
-    CameraSourcePreview mCameraView;
+    @BindView(R.id.texture)
+    AutoFitTextureView mCameraView;
     @BindView(R.id.overlay)
     FaceLandmarksOverlayView mOverlayView;
     ProgressDialog mProgressDialog;
@@ -87,7 +91,31 @@ public class SampleOfFacesAndLandmarksActivity3
         mDisposables = new CompositeDisposable();
         mDisposables.add(
             grantPermission()
-                .subscribe());
+                .flatMap(new Function<Boolean, ObservableSource<Boolean>>() {
+                    @Override
+                    public ObservableSource<Boolean> apply(Boolean granted)
+                        throws Exception {
+                        if (granted) {
+                            return new TextureViewObservable(mCameraView);
+                        } else {
+                            throw new IllegalStateException("Permission is not granted.");
+                        }
+                    }
+                })
+//                .onErrorReturn(new Function<Throwable, UiModel>() {
+//                    @Override
+//                    public UiModel apply(Throwable throwable) throws Exception {
+//                        return UiModel.failed(throwable);
+//                    }
+//                })
+                .ofType(Object.class)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object anything)
+                        throws Exception {
+                        Log.d("xyz", anything.toString());
+                    }
+                }));
     }
 
     @Override
@@ -96,24 +124,17 @@ public class SampleOfFacesAndLandmarksActivity3
 
         hideProgressBar();
 
-        // Close camera.
-        mCameraView.release();
-
         mDisposables.clear();
     }
 
     @Override
     public boolean isFacingFront() {
-        return CameraSource.CAMERA_FACING_FRONT ==
-               mCameraView.getCameraSource()
-                          .getCameraFacing();
+        return false;
     }
 
     @Override
     public boolean isFacingBack() {
-        return CameraSource.CAMERA_FACING_BACK ==
-               mCameraView.getCameraSource()
-                          .getCameraFacing();
+        return false;
     }
 
     @Override
