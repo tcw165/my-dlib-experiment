@@ -51,5 +51,9 @@
         <activity
             android:name=".SampleOfFacesAndLandmarksActivity2">
         </activity>
+
+        <activity
+            android:name=".SampleOfFacesAndLandmarksActivity3">
+        </activity>
     </application>
 </manifest>

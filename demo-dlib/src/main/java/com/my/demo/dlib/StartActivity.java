@@ -21,7 +21,9 @@
 package com.my.demo.dlib;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -123,7 +125,8 @@ public class StartActivity
                         public void onClick(View v) {
                             startActivity(
                                 new Intent(StartActivity.this,
-                                           SampleOfFacesAndLandmarksActivity1.class));
+                                           SampleOfFacesAndLandmarksActivity1.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
                         }
                     }),
                 new SampleMenuItem(
@@ -141,7 +144,28 @@ public class StartActivity
                         public void onClick(View v) {
                             startActivity(
                                 new Intent(StartActivity.this,
-                                           SampleOfFacesAndLandmarksActivity2.class));
+                                           SampleOfFacesAndLandmarksActivity2.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                        }
+                    }),
+                new SampleMenuItem(
+                    "Camera2 API Experiment",
+                    "Exploring what is special of using Camera2 versus " +
+                    "depreciated Camera",
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                startActivity(
+                                    new Intent(StartActivity.this,
+                                               SampleOfFacesAndLandmarksActivity3.class)
+                                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                            } else {
+                                new AlertDialog.Builder(StartActivity.this)
+                                    .setTitle(R.string.alert_unsupported_api)
+                                    .setMessage(R.string.alert_api_21_is_required)
+                                    .show();
+                            }
                         }
                     })
             });
