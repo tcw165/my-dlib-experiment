@@ -1,3 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Common -->
+    <color name="colorPrimary">@color/white</color>
+    <color name="colorPrimaryDark">@color/black_95</color>
+    <color name="colorAccent">@color/black_30</color>
+    <color name="textColorPrimary">@color/black_30</color>
+    <color name="textColorSecondary">@color/black_70</color>
+    <color name="windowBackground">@color/white</color>
+    <color name="colorControlNormal">@color/black_30</color>
+    <color name="navigationBarColor">@android:color/black</color>
+
+    <!-- Background -->
+    <color name="bg_splash_screen">@color/windowBackground</color>
+    <color name="bg_translucent_black">#B2000000</color>
+
+    <!-- PicCollage Palette -->
+    <color name="accent">#4fc3c6</color>
+    <color name="white">#fafafa</color>
+    <color name="pure_white">#ffffff</color>
+    <color name="black_30">#4c4c4c</color>
+    <color name="black_50">#808080</color>
+    <color name="black_70">#b3b3b3</color>
+    <color name="black_80">#cccccc</color>
+    <color name="black_90">#e6e6e6</color>
+    <color name="black_95">#f3f3f3</color>
+    <color name="red">#ff6666</color>
+    <color name="pink">#ff4f7b</color>
 </resources>

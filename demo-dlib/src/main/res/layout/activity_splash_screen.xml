@@ -5,14 +5,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_splash_screen"
     tools:context=".SplashScreenActivity">
-
-    <android.support.v7.widget.AppCompatImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="40dp"
-        android:scaleType="centerInside"
-        android:layout_gravity="center"
-        app:srcCompat="@drawable/img_splash_screen"/>
 </FrameLayout>

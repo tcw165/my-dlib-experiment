@@ -1,2 +1,71 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- common Activity theme with system tool bar -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="editTextColor">@color/textColorPrimary</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+
+        <item name="android:windowBackground">@color/windowBackground</item>
+
+        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+
+        <item name="android:activityOpenEnterAnimation">@null</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+    </style>
+
+    <!-- common Activity theme without system tool bar -->
+    <style name="AppTheme.CustomToolbar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- Splash screen -->
+    <style name="AppTheme.SplashScreen" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <!-- The tip of making the splash screen displayed instantly -->
+        <item name="android:windowBackground">@drawable/img_splash_screen_for_window_theme</item>
+    </style>
+
+    <!-- Transparent Window Activity -->
+    <style name="AppTheme.TransparentWindow" parent="AppTheme.CustomToolbar">
+        <item name="android:windowIsTranslucent">true</item>
+        <!--
+        We want the translucent background painted by the root layout instead
+        of painted by the window.
+        -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+    </style>
+
+    <!-- Shadow/Invisible Activity -->
+    <style name="AppTheme.Invisible" parent="AppTheme.CustomToolbar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <!-- Common toolbar -->
+    <style name="ThemeOverlay.ToolBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    </style>
+
+    <style name="ThemeOverlay.ToolBarPopup" parent="ThemeOverlay.AppCompat.Light">
+    </style>
 </resources>
