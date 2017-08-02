@@ -30,6 +30,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.my.core.protocol.IProgressBarView;
 import com.my.core.util.ViewUtil;
 import com.my.widget.adapter.SampleMenuAdapter;
@@ -142,10 +144,17 @@ public class StartActivity
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            startActivity(
-                                new Intent(StartActivity.this,
-                                           SampleOfFacesAndLandmarksActivity2.class)
-                                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                            if (checkPlayServices()) {
+                                startActivity(
+                                    new Intent(StartActivity.this,
+                                               SampleOfFacesAndLandmarksActivity2.class)
+                                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                            } else {
+                                new AlertDialog.Builder(StartActivity.this)
+                                    .setTitle(R.string.alert_unsupported_api)
+                                    .setMessage(R.string.alert_no_google_play_service)
+                                    .show();
+                            }
                         }
                     }),
                 new SampleMenuItem(
@@ -183,6 +192,22 @@ public class StartActivity
                 item.onClickListener.onClick(view);
             }
         };
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK.
+     */
+    protected boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, 0)
+                               .show();
+            }
+            return false;
+        }
+        return true;
     }
 
     ///////////////////////////////////////////////////////////////////////////
