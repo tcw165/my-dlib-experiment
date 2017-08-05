@@ -76,7 +76,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-public class SampleOfFacesAndLandmarksActivity3
+public class SampleOfCamera2ApiActivity1
     extends AppCompatActivity
     implements IProgressBarView {
 

@@ -167,7 +167,7 @@ public class StartActivity
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 startActivity(
                                     new Intent(StartActivity.this,
-                                               SampleOfFacesAndLandmarksActivity3.class)
+                                               SampleOfCamera2ApiActivity1.class)
                                         .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
                             } else {
                                 new AlertDialog.Builder(StartActivity.this)
