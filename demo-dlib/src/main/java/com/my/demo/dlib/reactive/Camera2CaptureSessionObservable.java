@@ -116,12 +116,12 @@ public class Camera2CaptureSessionObservable extends Observable<Camera2CaptureSe
 
         @Override
         public void onConfigureFailed(@NonNull CameraCaptureSession session) {
-
             session.close();
+            mCaptureSession = null;
 
             if (!isDisposed()) {
-                mObserver.onError(new RuntimeException("Fail to configure session."));
                 dispose();
+                mObserver.onError(new RuntimeException("Fail to configure session."));
             }
         }
 

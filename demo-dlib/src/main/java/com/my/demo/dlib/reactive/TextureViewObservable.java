@@ -74,6 +74,8 @@ public class TextureViewObservable extends Observable<Boolean> {
         public void onSurfaceTextureAvailable(SurfaceTexture texture,
                                               int width,
                                               int height) {
+            if (isDisposed()) return;
+
             mObserver.onNext(true);
         }
 

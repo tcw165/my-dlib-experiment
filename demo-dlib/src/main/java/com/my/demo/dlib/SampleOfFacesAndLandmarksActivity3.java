@@ -50,6 +50,8 @@ import android.view.View;
 
 import com.my.core.protocol.IProgressBarView;
 import com.my.demo.dlib.reactive.Camera2CaptureSessionObservable;
+import com.my.demo.dlib.reactive.Camera2ImageReaderObservable;
+import com.my.demo.dlib.reactive.Camera2ImageReaderObservable.OnImageAvailableEvent;
 import com.my.demo.dlib.reactive.Camera2Observable;
 import com.my.demo.dlib.reactive.TextureViewObservable;
 import com.my.demo.dlib.view.AutoFitTextureView;
@@ -98,7 +100,6 @@ public class SampleOfFacesAndLandmarksActivity3
     // Camera configuration.
     int mSensorOrientation;
     Size mPreviewSize;
-    private ImageReader mPreviewImageReader;
     private HandlerThread mBackgroundThread;
     private Handler mBackgroundHandler;
 
@@ -133,14 +134,13 @@ public class SampleOfFacesAndLandmarksActivity3
         mBackgroundThread.start();
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
 
-        // TODO: Check if the Google Play Service is present.
         mDisposables = new CompositeDisposable();
         mDisposables.add(
             grantPermission()
                 .compose(waitForTextureSurfaceReady())
                 .compose(openCameraToGetCameraDevice())
                 .compose(createCaptureSession())
-                .compose(setRepeatedCaptureRequest())
+                .compose(setCaptureRequestAndObserveAvailableImage())
                 .onErrorReturn(new Function<Throwable, Object>() {
                     @Override
                     public Object apply(Throwable throwable) throws Exception {
@@ -164,6 +164,15 @@ public class SampleOfFacesAndLandmarksActivity3
     protected void onPause() {
         super.onPause();
 
+        // Stop every observables:
+        // Will stop: CameraDevice -> CameraCaptureSession -> ImageReader
+        // in this order as the same order adding the observables.
+        mDisposables.clear();
+
+        // Force to hide the progress bar and alert-dialog.
+        hideProgressBar();
+        hideAlertDialog();
+
         // Stops the background thread
         mBackgroundThread.quitSafely();
         try {
@@ -173,26 +182,6 @@ public class SampleOfFacesAndLandmarksActivity3
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        // TODO: Close camera and reader.
-//        if (null != captureSession) {
-//            captureSession.close();
-//            captureSession = null;
-//        }
-//        if (null != cameraDevice) {
-//            cameraDevice.close();
-//            cameraDevice = null;
-//        }
-//        if (null != previewReader) {
-//            previewReader.close();
-//            previewReader = null;
-//        }
-
-        // Force to hide the progress bar and alert-dialog.
-        hideProgressBar();
-        hideAlertDialog();
-
-        mDisposables.clear();
     }
 
     @Override
@@ -349,22 +338,53 @@ public class SampleOfFacesAndLandmarksActivity3
                             captureOutputs.add(previewSurface);
 
                             // Configure the reader for the preview frames.
-                            mPreviewImageReader = ImageReader.newInstance(
+                            final ImageReader previewImageReader = ImageReader.newInstance(
                                 mPreviewSize.getWidth(),
                                 mPreviewSize.getHeight(),
                                 ImageFormat.YUV_420_888, 2);
-                            // TODO: Register onImageAvailableListener.
-//                            mPreviewImageReader.setOnImageAvailableListener(mOnImageAvailableListener,
-//                                                                            mBackgroundHandler);
-                            final Surface readerSurface = mPreviewImageReader.getSurface();
+                            final Surface readerSurface = previewImageReader.getSurface();
                             captureOutputs.add(readerSurface);
 
-                            return new Camera2CaptureSessionObservable(device,
-                                                                       captureOutputs,
-                                                                       mBackgroundHandler);
+                            return Observable.mergeArray(
+                                // Ready to create the capture session.
+                                new Camera2CaptureSessionObservable(device,
+                                                                    captureOutputs,
+                                                                    mBackgroundHandler),
+                                // Because we also want to get the preview image
+                                // for post processing, create an observable for
+                                // emitting the available image.
+                                new Camera2ImageReaderObservable(previewImageReader,
+                                                                 mBackgroundHandler));
                         }
                     })
                     .ofType(Object.class);
+            }
+        };
+    }
+
+    private ObservableTransformer<Object, ?> setCaptureRequestAndObserveAvailableImage() {
+        return new ObservableTransformer<Object, Object>() {
+            @Override
+            public ObservableSource<Object> apply(Observable<Object> upstream) {
+                return upstream
+                    // Make the upstream shared among several downstream:
+                    //
+                    //                   +----> downstream 1
+                    // .----------.      |
+                    // | upstream |------+----> downstream 2
+                    // '----------'      |
+                    //                   +----> downstream 3
+                    //                   |
+                    //                   ... or more
+                    .publish(new Function<Observable<Object>, ObservableSource<Object>>() {
+                        @Override
+                        public ObservableSource<Object> apply(Observable<Object> shared)
+                            throws Exception {
+                            return Observable.mergeArray(
+                                shared.compose(setRepeatedCaptureRequest()),
+                                shared.compose(onImageAvailable()));
+                        }
+                    });
             }
         };
     }
@@ -384,7 +404,8 @@ public class SampleOfFacesAndLandmarksActivity3
                             final List<Surface> captureOutputs = sessionBlob.captureOutputs;
 
                             // Init the request builder.
-                            final CaptureRequest.Builder requestBuilder = device.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+                            final CaptureRequest.Builder requestBuilder = device
+                                .createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
                             // Auto focus should be continuous for camera preview.
                             requestBuilder.set(
                                 CaptureRequest.CONTROL_AF_MODE,
@@ -398,10 +419,28 @@ public class SampleOfFacesAndLandmarksActivity3
                             // Finally, we start displaying the camera preview.
                             session.setRepeatingRequest(requestBuilder.build(), null, mBackgroundHandler);
 
+                            // IGNORED.
                             return Observable.just(0);
                         }
                     })
                     .ofType(Object.class);
+            }
+        };
+    }
+
+    private ObservableTransformer<Object, ?> onImageAvailable() {
+        return new ObservableTransformer<Object, Object>() {
+            @Override
+            public ObservableSource<Object> apply(Observable<Object> upstream) {
+                return upstream
+                    .ofType(OnImageAvailableEvent.class)
+                    .map(new Function<OnImageAvailableEvent, Object>() {
+                        @Override
+                        public Object apply(OnImageAvailableEvent event)
+                            throws Exception {
+                            return 0;
+                        }
+                    });
             }
         };
     }
@@ -533,14 +572,6 @@ public class SampleOfFacesAndLandmarksActivity3
 
         mCameraView.setTransform(matrix);
     }
-
-    private ImageReader.OnImageAvailableListener mOnImageAvailableListener =
-        new ImageReader.OnImageAvailableListener() {
-            @Override
-            public void onImageAvailable(ImageReader reader) {
-                Log.d("xyz", "Read image!");
-            }
-        };
 
     ///////////////////////////////////////////////////////////////////////////
     // Clazz //////////////////////////////////////////////////////////////////

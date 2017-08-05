@@ -93,9 +93,11 @@ public class Camera2Observable extends Observable<CameraDevice> {
         @Override
         public void onDisconnected(@NonNull CameraDevice cameraDevice) {
             synchronized (mMutex) {
+                cameraDevice.close();
+                dispose();
+
                 mObserver.onError(new RuntimeException(
                     "The camera is disconnected."));
-                dispose();
             }
         }
 
@@ -103,9 +105,11 @@ public class Camera2Observable extends Observable<CameraDevice> {
         public void onError(@NonNull CameraDevice cameraDevice,
                             int i) {
             synchronized (mMutex) {
+                cameraDevice.close();
+                dispose();
+
                 mObserver.onError(new RuntimeException(
                     "The camera error."));
-                dispose();
             }
         }
 
