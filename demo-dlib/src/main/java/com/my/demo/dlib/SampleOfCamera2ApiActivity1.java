@@ -49,6 +49,7 @@ import android.view.Surface;
 import android.view.View;
 
 import com.my.core.protocol.IProgressBarView;
+import com.my.core.util.ProfilerUtil;
 import com.my.demo.dlib.reactive.Camera2CaptureSessionObservable;
 import com.my.demo.dlib.reactive.Camera2ImageReaderObservable;
 import com.my.demo.dlib.reactive.Camera2ImageReaderObservable.OnImageAvailableEvent;
@@ -438,6 +439,14 @@ public class SampleOfCamera2ApiActivity1
                         @Override
                         public Object apply(OnImageAvailableEvent event)
                             throws Exception {
+
+                            ProfilerUtil.startProfiling();
+
+                            // TODO: Convert YUV_420_888 to RGB or BGR.
+
+                            Log.d("xyz", String.format("YUV_420_888 to RGB (took %.3f)",
+                                                       ProfilerUtil.stopProfiling()));
+
                             return 0;
                         }
                     });
