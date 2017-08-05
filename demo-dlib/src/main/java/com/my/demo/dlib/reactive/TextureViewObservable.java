@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package com.my.demo.dlib.view;
+package com.my.demo.dlib.reactive;
 
 import android.graphics.SurfaceTexture;
 import android.view.TextureView;

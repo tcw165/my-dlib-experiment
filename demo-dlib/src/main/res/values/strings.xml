@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">My DLib Demo</string>
 
+    <string name="alert_common_error">Error</string>
     <string name="alert_unsupported_api">Unsupported API</string>
     <string name="alert_api_21_is_required">Your Android is older than Lollipop.</string>
     <string name="alert_no_google_play_service">Your Android doesn\'t have Google Play Service installed.</string>
