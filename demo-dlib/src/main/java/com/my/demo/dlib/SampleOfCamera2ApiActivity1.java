@@ -66,6 +66,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -435,6 +436,11 @@ public class SampleOfCamera2ApiActivity1
             public ObservableSource<Object> apply(Observable<Object> upstream) {
                 return upstream
                     .ofType(OnImageAvailableEvent.class)
+                    // Sample every N milliseconds because the following
+                    // computation might be longer than N milliseconds.
+                    // However sampling every 40 milliseconds is close to
+                    // 24fps.
+                    .sample(40, TimeUnit.MILLISECONDS)
                     .map(new Function<OnImageAvailableEvent, Object>() {
                         @Override
                         public Object apply(OnImageAvailableEvent event)

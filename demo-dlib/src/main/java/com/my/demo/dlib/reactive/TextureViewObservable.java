@@ -59,8 +59,8 @@ public class TextureViewObservable extends Observable<Boolean> {
         private final TextureView mTarget;
         Observer<? super Boolean> mObserver;
 
-        public DisposableListener(TextureView target,
-                                  Observer<? super Boolean> observer) {
+        DisposableListener(TextureView target,
+                           Observer<? super Boolean> observer) {
             mTarget = target;
             mObserver = observer;
         }
