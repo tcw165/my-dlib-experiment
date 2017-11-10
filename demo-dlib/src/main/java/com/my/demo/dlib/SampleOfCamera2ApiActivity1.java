@@ -327,9 +327,6 @@ public class SampleOfCamera2ApiActivity1
                         @Override
                         public ObservableSource<?> apply(CameraDevice device)
                             throws Exception {
-                            // Prepare output surfaces for capture session.
-                            final List<Surface> captureOutputs = new ArrayList<>();
-
                             // Configure the preview.
                             SurfaceTexture texture = mCameraView.getSurfaceTexture();
                             // Configure the size of default buffer to be
@@ -337,7 +334,6 @@ public class SampleOfCamera2ApiActivity1
                             texture.setDefaultBufferSize(mPreviewSize.getWidth(),
                                                          mPreviewSize.getHeight());
                             final Surface previewSurface = new Surface(texture);
-                            captureOutputs.add(previewSurface);
 
                             // Configure the reader for the preview frames.
                             final ImageReader previewImageReader = ImageReader.newInstance(
@@ -345,6 +341,10 @@ public class SampleOfCamera2ApiActivity1
                                 mPreviewSize.getHeight(),
                                 ImageFormat.YUV_420_888, 2);
                             final Surface readerSurface = previewImageReader.getSurface();
+
+                            // Prepare output surfaces for capture session.
+                            final List<Surface> captureOutputs = new ArrayList<>();
+                            captureOutputs.add(previewSurface);
                             captureOutputs.add(readerSurface);
 
                             return Observable.mergeArray(
