@@ -1,16 +1,15 @@
 ext {
-    compileSdkVersion = 26
-    buildToolsVersion = '25.0.3'
-    minSdkVersion = 21
-    targetSdkVersion = 26
+    compileSdkVersion = 27
+    buildToolsVersion = '27.0.3'
+    minSdkVersion = 19
+    targetSdkVersion = 27
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
 
-    SUPPORT_LIB_VER = '25.2.0'
-    PLAY_SERVICES_VER = '10.2.6'
-    FIREBASE_VER = '10.2.6'
-    RX_BINDING_VER = '2.0.0'
-    DAGGER2_VER = '2.11-rc2'
+    SUPPORT_LIB_VER = '27.1.1'
+    KOTLIN_VER = '1.2.21'
+    RX_BINDING_VER = '2.1.1'
+    DAGGER2_VER = '2.13'
     BOLTS_VER = '1.4.0'
     RETROFIT_VER = "2.1.0"
     OKHTTP_VER = '3.0.1'
@@ -18,77 +17,118 @@ ext {
 
     dep = [
             // Google Support Library.
-            supportV4              : "com.android.support:support-v4:$SUPPORT_LIB_VER",
-            supportV4CoreUtils     : "com.android.support:support-core-utils:$SUPPORT_LIB_VER",
-            supportAppcompatV7     : "com.android.support:appcompat-v7:$SUPPORT_LIB_VER",
-            supportRecyclerViewV7  : "com.android.support:recyclerview-v7:${SUPPORT_LIB_VER}",
-            supportCardViewV7      : "com.android.support:cardview-v7:${SUPPORT_LIB_VER}",
-            supportGridLayoutV7    : "com.android.support:gridlayout-v7:${SUPPORT_LIB_VER}",
-            supportAnnotations     : "com.android.support:support-annotations:$SUPPORT_LIB_VER",
-            supportDesign          : "com.android.support:design:${SUPPORT_LIB_VER}",
-            supportVectorDrawable  : "com.android.support:support-vector-drawable:${SUPPORT_LIB_VER}",
-            supportPercent         : "com.android.support:percent:${SUPPORT_LIB_VER}",
-            supportTransition      : "com.android.support:transition:${SUPPORT_LIB_VER}",
-            supportConstraintLayout: "com.android.support.constraint:constraint-layout:1.0.2",
-            supportMultidex        : 'com.android.support:multidex:1.0.1',
+            supportV4                 : "com.android.support:support-v4:$SUPPORT_LIB_VER",
+            supportV4CoreUtils        : "com.android.support:support-core-utils:$SUPPORT_LIB_VER",
+            supportV13                : "com.android.support:support-v13:$SUPPORT_LIB_VER",
+            supportCompat             : "com.android.support:support-compat:$SUPPORT_LIB_VER",
+            supportPreference         : "com.android.support:preference-v7:$SUPPORT_LIB_VER",
+            supportAppcompatV7        : "com.android.support:appcompat-v7:$SUPPORT_LIB_VER",
+            supportExif               : "com.android.support:exifinterface:$SUPPORT_LIB_VER",
+            supportRecyclerViewV7     : "com.android.support:recyclerview-v7:${SUPPORT_LIB_VER}",
+            supportCardViewV7         : "com.android.support:cardview-v7:${SUPPORT_LIB_VER}",
+            supportGridLayoutV7       : "com.android.support:gridlayout-v7:${SUPPORT_LIB_VER}",
+            supportAnnotations        : "com.android.support:support-annotations:$SUPPORT_LIB_VER",
+            supportDesign             : "com.android.support:design:${SUPPORT_LIB_VER}",
+            supportVectorDrawable     : "com.android.support:support-vector-drawable:${SUPPORT_LIB_VER}",
+            supportPercent            : "com.android.support:percent:${SUPPORT_LIB_VER}",
+            supportTransition         : "com.android.support:transition:${SUPPORT_LIB_VER}",
+            supportConstraintLayout   : "com.android.support.constraint:constraint-layout:1.1.0",
+            supportMultidex           : 'com.android.support:multidex:1.0.1',
+            // Google Services Gradle Plugin
+            googleServices            : 'com.google.gms:google-services:3.2.0',
             // Google Play Service.
-            playServicesAds        : "com.google.android.gms:play-services-ads:${PLAY_SERVICES_VER}",
-            playServicesAnalytics  : "com.google.android.gms:play-services-analytics:${PLAY_SERVICES_VER}",
-            playServicesVision     : "com.google.android.gms:play-services-vision:${PLAY_SERVICES_VER}",
+            playServicesAds           : "com.google.android.gms:play-services-ads:15.0.1",
+            playServicesAnalytics     : "com.google.android.gms:play-services-analytics:15.0.1",
+            playServicesVision        : "com.google.android.gms:play-services-vision:15.0.1",
+            playServicesGcm           : "com.google.android.gms:play-services-gcm:15.0.1",
             // Google Firebase.
-            firebaseCore           : "com.google.firebase:firebase-core:${FIREBASE_VER}",
-            firebaseAnalytics      : "com.google.firebase:firebase-analytics:${FIREBASE_VER}",
-            firebaseAuth           : "com.google.firebase:firebase-auth:${FIREBASE_VER}",
-            firebaseConfig         : "com.google.firebase:firebase-config:${FIREBASE_VER}",
-            firebaseCrash          : "com.google.firebase:firebase-crash:${FIREBASE_VER}",
-            firebaseMessaging      : "com.google.firebase:firebase-messaging:${FIREBASE_VER}",
-            firebaseInvites        : "com.google.firebase:firebase-invites:${FIREBASE_VER}",
-            firebasePerf           : "com.google.firebase:firebase-perf:${FIREBASE_VER}",
+            firebaseCore              : 'com.google.firebase:firebase-core:15.0.2',
+            firebaseAnalytics         : 'com.google.firebase:firebase-analytics:15.0.2',
+            firebaseAuth              : 'com.google.firebase:firebase-auth:15.1.0',
+            firebaseConfig            : 'com.google.firebase:firebase-config:15.0.2',
+            firebaseCrash             : 'com.google.firebase:firebase-crash:15.0.2',
+            firebaseMessaging         : 'com.google.firebase:firebase-messaging:15.0.2',
+            firebaseInvites           : 'com.google.firebase:firebase-invites:15.0.1',
+            firebasePerf              : 'com.google.firebase:firebase-perf:15.2.0',
+            firebaseMlVision          : 'com.google.firebase:firebase-ml-vision:15.0.0',
+            firebaseMLCustomModel     : 'com.google.firebase:firebase-ml-model-interpreter:15.0.0',
+            // Google Android Architecture Component
+            androidArcViewModel       : 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0-alpha1',
+            androidArcLiveData        : 'androidx.lifecycle:lifecycle-livedata:2.0.0-alpha1',
+            androidArcLifecycle       : 'androidx.lifecycle:lifecycle-runtime:2.0.0-alpha1',
+            androidArcRoom            : 'androidx.room:room-runtime:2.0.0-alpha1',
+            androidArcRoomAnnotation  : 'androidx.room:room-compiler:2.0.0-alpha1',
+            androidArchWork           : 'android.arch.work:work-runtime-ktx:1.0.0-alpha01',
+            androidArchWorkFirebaseJob: 'android.arch.work:work-firebase:1.0.0-alpha01',
+            // Kotlin.
+            kotlinGradle              : "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VER",
+            kotlinStdlib              : "org.jetbrains.kotlin:kotlin-stdlib:$KOTLIN_VER",
+            kotlinStdlibJre7          : "org.jetbrains.kotlin:kotlin-stdlib-jre7:$KOTLIN_VER",
+            kotlinStdlibJre8          : "org.jetbrains.kotlin:kotlin-stdlib-jre8:$KOTLIN_VER",
+            kotlinUnitTest            : "org.jetbrains.kotlin:kotlin-test-junit:$KOTLIN_VER",
+            kotlinCoroutinesCore      : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21',
             // Facebook.
-            facebook               : 'com.facebook.android:facebook-android-sdk:4.18.0',
-            facebookAudienceNetwork: 'com.facebook.android:audience-network-sdk:4.17.0',
+            facebookShare             : 'com.facebook.android:facebook-share:4.27.0',
+            facebookLogin             : 'com.facebook.android:facebook-login:4.27.0',
+            facebookMessenger         : 'com.facebook.android:facebook-messenger:4.27.0',
+            facebookAudienceNetwork   : 'com.facebook.android:audience-network-sdk:4.28.1',
             // JSON.
-            gson                   : "com.google.code.gson:gson:2.7",
+            gson                      : "com.google.code.gson:gson:2.7",
             // Image.
-            fresco                 : "com.facebook.fresco:fresco:0.14.1",
-            glide                  : "com.github.bumptech.glide:glide:3.7.0",
-            lottie                 : 'com.airbnb.android:lottie:2.0.0-rc1',
-            adobeFoundation        : 'com.adobe.creativesdk.foundation:auth:0.9.1251',
-            adobeImage             : 'com.adobe.creativesdk:image:4.8.3',
+            fresco                    : "com.facebook.fresco:fresco:1.8.1",
+            glide                     : 'com.github.bumptech.glide:glide:4.3.1',
+            glideAnnotation           : 'com.github.bumptech.glide:compiler:4.3.1',
+            lottie                    : 'com.airbnb.android:lottie:2.5.5',
+            adobeFoundation           : 'com.adobe.creativesdk.foundation:auth:0.9.1251',
+            adobeImage                : 'com.adobe.creativesdk:image:4.8.3',
             // RxJava.
-            rxJava                 : 'io.reactivex.rxjava2:rxjava:2.1.0',
-            rxAndroid              : 'io.reactivex.rxjava2:rxandroid:2.0.1',
-            rxRelay                : 'com.jakewharton.rxrelay2:rxrelay:2.0.0',
-            rxBinding              : "com.jakewharton.rxbinding2:rxbinding:${RX_BINDING_VER}",
-            rxBindingRecyclerViewV7: "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${RX_BINDING_VER}",
-            rxPermissions          : 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar',
+            rxKotlin                  : 'io.reactivex.rxjava2:rxkotlin:2.2.0',
+            rxJava                    : 'io.reactivex.rxjava2:rxjava:2.1.13',
+            rxAndroid                 : 'io.reactivex.rxjava2:rxandroid:2.0.2',
+            rxRelay                   : 'com.jakewharton.rxrelay2:rxrelay:2.0.0',
+            rxBinding                 : "com.jakewharton.rxbinding2:rxbinding:${RX_BINDING_VER}",
+            rxBindingCompat           : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${RX_BINDING_VER}",
+            rxBindingRecyclerViewV7   : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${RX_BINDING_VER}",
+            rxPermissions             : 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar',
+            // Gesture
+            collageGestureDetector    : 'com.cardinalblue.gesture:collage-gesture-detector:2.4.4',
+            collageGestureDetectorRx  : 'com.cardinalblue.gesture:collage-gesture-detector-rx:2.4.5',
             // View Binding.
-            butterKnife            : "com.jakewharton:butterknife:${BUTTER_KNIFE_VER}",
-            butterKnifeCompiler    : "com.jakewharton:butterknife-compiler:${BUTTER_KNIFE_VER}",
+            butterKnife               : "com.jakewharton:butterknife:${BUTTER_KNIFE_VER}",
+            butterKnifeCompiler       : "com.jakewharton:butterknife-compiler:${BUTTER_KNIFE_VER}",
+            butterKnifeGradlePlugin   : 'com.jakewharton:butterknife-gradle-plugin:8.6.0',
             // Dependency Injection.
-            dagger2                : "com.google.dagger:dagger:${DAGGER2_VER}",
-            dagger2Support         : "com.google.dagger:dagger-android-support:${DAGGER2_VER}",
-            dagger2Compiler        : "com.google.dagger:dagger-compiler:${DAGGER2_VER}",
+            dagger2                   : "com.google.dagger:dagger:${DAGGER2_VER}",
+            dagger2Support            : "com.google.dagger:dagger-android-support:${DAGGER2_VER}",
+            dagger2Compiler           : "com.google.dagger:dagger-compiler:${DAGGER2_VER}",
+            // Navigation.
+            cicerone                  : 'ru.terrakok.cicerone:cicerone:2.1.0',
             // Leak Detection.
-            leakcanary             : 'com.squareup.leakcanary:leakcanary-android:1.5.1',
-            leakcanaryNoOp         : 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1',
+            leakcanary                : 'com.squareup.leakcanary:leakcanary-android:1.5.1',
+            leakcanaryNoOp            : 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1',
+            // IO, Cache
+            diskLruCache              : 'com.jakewharton:disklrucache:2.0.2',
             // Custom View.
-            discreteScrollView     : 'com.yarolegovich:discrete-scrollview:1.2.0',
+            airbnbEpoxy               : 'com.airbnb.android:epoxy:2.7.3',
+            airbnbEpoxyAnnotation     : 'com.airbnb.android:epoxy-processor:2.7.3',
+            discreteScrollView        : 'com.yarolegovich:discrete-scrollview:1.4.4',
+            snappyRecyclerView        : 'com.github.dan-td:snappy-recyclerview:1.0.2',
             // ASYNC.
-            bolts                  : "com.parse.bolts:bolts-tasks:$BOLTS_VER",
+            bolts                     : "com.parse.bolts:bolts-tasks:$BOLTS_VER",
             // BUS.
-            ottoBus                : 'com.squareup:otto:1.3.6',
+            ottoBus                   : 'com.squareup:otto:1.3.6',
             // HTTP/HTTPS.
-            retrofit2              : "com.squareup.retrofit2:retrofit:${RETROFIT_VER}",
-            retrofit2ConverterGson : "com.squareup.retrofit2:converter-gson:${RETROFIT_VER}",
-            retrofit2RxJava2Adapter: 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0',
-            okhttp                 : "com.squareup.okhttp3:okhttp:$OKHTTP_VER",
-            okhttpMockWebServer    : "com.squareup.okhttp3:mockwebserver:$OKHTTP_VER",
-            volley                 : 'com.android.volley:volley:1.0.0',
+            retrofit2                 : "com.squareup.retrofit2:retrofit:${RETROFIT_VER}",
+            retrofit2ConverterGson    : "com.squareup.retrofit2:converter-gson:${RETROFIT_VER}",
+            retrofit2RxJava2Adapter   : 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0',
+            okhttp                    : "com.squareup.okhttp3:okhttp:$OKHTTP_VER",
+            okhttpMockWebServer       : "com.squareup.okhttp3:mockwebserver:$OKHTTP_VER",
+            volley                    : 'com.android.volley:volley:1.0.0',
             // TESTING.
-            testJunit              : 'junit:junit:4.12',
-            testMockito            : 'org.mockito:mockito-core:2.8.9',
-            testEspressoCore       : 'com.android.support.test.espresso:espresso-core:2.2.2',
-            testRunner             : 'com.android.support.test:runner:0.5'
+            testJunit                 : 'junit:junit:4.12',
+            testGoogleTruth           : 'com.google.truth:truth:0.34',
+            testMockito               : 'org.mockito:mockito-core:2.8.9',
+            testEspressoCore          : 'com.android.support.test.espresso:espresso-core:3.0.1',
+            testRunner                : 'com.android.support.test:runner:1.0.1'
     ]
 }

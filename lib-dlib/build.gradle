@@ -1,18 +1,32 @@
 apply plugin: "com.android.library"
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+// Some annotation processors (such as AutoFactory) rely on precise types in
+// declaration signatures. By default, Kapt replaces every unknown type
+// (including types for the generated classes) to NonExistentClass, but you
+// can change this behavior. Add the additional flag to the build.gradle file
+// to enable error type inferring in stubs:
+kapt {
+    correctErrorTypes = true
+}
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 25
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
 
         ndk {
-            // "x86", "x86_64", "armeabi", "armeabi-v7a", "arm64-v8a"
-            abiFilters "x86", "x86_64", "armeabi", "armeabi-v7a", "arm64-v8a"
+            // Specifies the ABI configurations of your native
+            // libraries Gradle should build and package with your APK.
+            // Options: 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+            abiFilters 'armeabi-v7a'
         }
         externalNativeBuild {
             cmake {
@@ -61,7 +75,7 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: "libs", include: ["*.jar"])
+    api fileTree(dir: "libs", include: ["*.jar"])
 
-    testCompile rootProject.ext.dep.testJunit
+    testImplementation rootProject.ext.dep.testJunit
 }

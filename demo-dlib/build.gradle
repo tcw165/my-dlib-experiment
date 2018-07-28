@@ -1,4 +1,16 @@
-apply plugin: "com.android.application"
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+// Some annotation processors (such as AutoFactory) rely on precise types in
+// declaration signatures. By default, Kapt replaces every unknown type
+// (including types for the generated classes) to NonExistentClass, but you
+// can change this behavior. Add the additional flag to the build.gradle file
+// to enable error type inferring in stubs:
+kapt {
+    correctErrorTypes = true
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -17,9 +29,25 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         ndk {
-            // "x86", "x86_64", "armeabi", "armeabi-v7a", "arm64-v8a"
-            abiFilters "x86", "armeabi-v7a"
+            // Specifies the ABI configurations of your native
+            // libraries Gradle should build and package with your APK.
+            // Options: 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+            abiFilters 'armeabi-v7a'
         }
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+
+    aaptOptions {
+        noCompress "tflite"
+    }
+
+    // Pick first STL shared library if there're duplicate files in the
+    // dependent module.
+    packagingOptions {
+        pickFirst  "**/libc++_shared.so"
     }
 
     buildTypes {
@@ -29,15 +57,6 @@ android {
         }
     }
 
-    lintOptions {
-        disable "MissingTranslation"
-    }
-
-    // Pick first STL shared library if there're duplicate files in the
-    // dependent module.
-    packagingOptions {
-        pickFirst  "**/libc++_shared.so"
-    }
 }
 
 repositories {
@@ -47,59 +66,59 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: "libs", include: ["*.jar"])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Google Support Library.
-    compile rootProject.ext.dep.supportAppcompatV7
-    compile rootProject.ext.dep.supportRecyclerViewV7
-    compile rootProject.ext.dep.supportGridLayoutV7
-    compile rootProject.ext.dep.supportCardViewV7
-    compile rootProject.ext.dep.supportDesign
-    compile rootProject.ext.dep.supportVectorDrawable
-    compile rootProject.ext.dep.supportConstraintLayout
-    compile rootProject.ext.dep.supportPercent
-    compile rootProject.ext.dep.supportTransition
+    implementation rootProject.ext.dep.supportAppcompatV7
+    implementation rootProject.ext.dep.supportRecyclerViewV7
+    implementation rootProject.ext.dep.supportGridLayoutV7
+    implementation rootProject.ext.dep.supportCardViewV7
+    implementation rootProject.ext.dep.supportDesign
+    implementation rootProject.ext.dep.supportVectorDrawable
+    implementation rootProject.ext.dep.supportConstraintLayout
+    implementation rootProject.ext.dep.supportPercent
+    implementation rootProject.ext.dep.supportTransition
     // Multi-dex.
-    compile rootProject.ext.dep.supportMultidex
+    implementation rootProject.ext.dep.supportMultidex
     // Google CameraView.
-    compile(name: "google-cameraview", ext:"aar")
+    implementation(name: "google-cameraview", ext:"aar")
     // Google Vision.
-    compile rootProject.ext.dep.playServicesVision
+    implementation rootProject.ext.dep.playServicesVision
 
     // Rx-Java.
-    compile rootProject.ext.dep.rxJava
-    compile rootProject.ext.dep.rxAndroid
+    implementation rootProject.ext.dep.rxJava
+    implementation rootProject.ext.dep.rxAndroid
     // Rx-Binding.
-    compile rootProject.ext.dep.rxBinding
-    compile rootProject.ext.dep.rxBindingRecyclerViewV7
+    implementation rootProject.ext.dep.rxBinding
+    implementation rootProject.ext.dep.rxBindingRecyclerViewV7
     // Rx-Permissions.
-    compile rootProject.ext.dep.rxPermissions
+    implementation rootProject.ext.dep.rxPermissions
 
     // JSON.
-    compile rootProject.ext.dep.gson
+    implementation rootProject.ext.dep.gson
 
     // View Binding.
-    compile rootProject.ext.dep.butterKnife
+    implementation rootProject.ext.dep.butterKnife
     annotationProcessor rootProject.ext.dep.butterKnifeCompiler
 
     // Image loader.
-    compile rootProject.ext.dep.glide
+    implementation rootProject.ext.dep.glide
 
     // Leak Detection.
-    compile rootProject.ext.dep.leakcanary
+    implementation rootProject.ext.dep.leakcanary
     releaseCompile rootProject.ext.dep.leakcanaryNoOp
 
     // My Libraries
-    compile(name: "lib-core-release", ext: "aar")
-    compile(name: "lib-reactive-release", ext: "aar")
-    compile(name: "lib-widget-release", ext: "aar")
-    compile project(":lib-dlib")
+    implementation(name: "lib-core-release", ext: "aar")
+    implementation(name: "lib-reactive-release", ext: "aar")
+    implementation(name: "lib-widget-release", ext: "aar")
+    implementation project(":lib-dlib")
 
-    testCompile rootProject.ext.dep.testJunit
-    testCompile rootProject.ext.dep.testMockito
-    testCompile rootProject.ext.dep.leakcanaryNoOp
+    testImplementation rootProject.ext.dep.testJunit
+    testImplementation rootProject.ext.dep.testMockito
+    testImplementation rootProject.ext.dep.leakcanaryNoOp
 
-    androidTestCompile(rootProject.ext.dep.testEspressoCore, {
+    androidTestImplementation(rootProject.ext.dep.testEspressoCore, {
         exclude group: "com.android.support", module: "support-annotations"
     })
 }
